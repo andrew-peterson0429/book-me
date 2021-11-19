@@ -11,7 +11,7 @@ const getters = {
         if (location.hostname.includes('localhost')) {
             return 'http://localhost:3000/api'
         } else {
-            return ''
+            return 'https://immense-oasis-85895.herokuapp.com/api'
         }
     }, 
 
