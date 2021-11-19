@@ -1,17 +1,22 @@
 <template>
     <div id='previewCard'>
         <div class='coverImg'>
-            <img v-if="coverUrl" class="book-cover" :src="`https://covers.openlibrary.org/b/isbn/${coverUrl}-M.jpg`" />
+            <img v-if="imgURL" class="book-cover" :src="`https://covers.openlibrary.org/b/isbn/${imgURL}-M.jpg`" />
         </div>
         <div class='bookInfo'>
             <h2>{{ title }}</h2>
             <h4>{{ author }}</h4>
         </div>
-        <div class="action-btns">
-            <button @click="toggleReadLater({ title: title, author: author, imgURL: coverUrl})">
-                <i class="far fa-bookmark"></i>
+        <div class="remove-icon" v-if="myBook">
+            <button @click="removeBook(myBook._id)">
+                <i class="fas fa-times"></i>
             </button>
-            <button @click="toggleHaveRead({ title: title, author: author, imgURL: coverUrl})">
+        </div>
+        <div class="action-btns">
+            <button @click="toggleReadLater({ title: title, author: author, imgURL: imgURL})">
+                <i class="fas fa-bookmark"></i>
+            </button>
+            <button @click="toggleHaveRead({ title: title, author: author, imgURL: imgURL})">
                 <i class="fas fa-book-open"></i>
             </button>
         </div>
@@ -23,9 +28,10 @@
 export default {
     name: 'Book Preview', 
     props: {
-        coverUrl: { type: String }, 
+        imgURL: { type: String }, 
         title: { type: String }, 
-        author: { type: String }
+        author: { type: String }, 
+        myBook: { type: Object }
     },
     methods: {
         async toggleReadLater(query) {
@@ -66,8 +72,27 @@ export default {
                 id: id, 
                 body: body
             })
-            console.log(response)
             this.$store.commit('updateMyBooks', response);
+        }, 
+        async removeBook(id) {
+            let firstCall = await this.$store.dispatch('crudAction', {
+                route: 'books', 
+                method: 'DELETE', 
+                id: id
+            })
+            let secondCall = await this.$store.dispatch('crudAction', {
+                route: 'books', 
+                method: 'GET'
+            })
+            this.$store.commit('updateMyBooks', secondCall)
+        }
+    }, 
+    computed: {
+        haveReadColor() {
+            return this.myBook?.haveRead ? '#0000ff' : '#383838' 
+        }, 
+        readLaterColor() {
+            return this.myBook?.readLater ? '#0000ff' : '#383838'
         }
     }
 }
@@ -115,10 +140,24 @@ export default {
         right: 12px;
     }  
 
+    .remove-icon {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+    }
+
     i {
         font-size: 1.4rem;
     }
+
+    .fa-bookmark {
+        color: v-bind(readLaterColor);
+    }
     
+    .fa-book-open {
+        color: v-bind(haveReadColor);
+    }
+
     button {
         background-color: transparent;
         border: none;

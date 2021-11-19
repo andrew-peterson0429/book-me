@@ -9,7 +9,7 @@ const state = () => ({
 const getters = {
     getUrl: () => {
         if (location.hostname.includes('localhost')) {
-            return 'http://localhost:3030/api'
+            return 'http://localhost:3000/api'
         } else {
             return ''
         }
@@ -76,7 +76,7 @@ const mutations = {
         for (let book of docs) {
             if (book.isbn && book.title && book.author_name)
             state.searchResults.push({
-                coverUrl: book.isbn[0], 
+                imgURL: book.isbn[0], 
                 title: book.title, 
                 author: book.author_name[0]
             })

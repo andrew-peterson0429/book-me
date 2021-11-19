@@ -5,8 +5,8 @@
             <button id="search-btn" @click="searchBooks(searchQuery)">Search</button>
         </div>
         <ul id="search-list">
-            <li v-for="(book, index) in searchResults" :key="index">
-                <BookPreview :coverUrl="book.coverUrl" :title="book.title" :author="book.author"/>
+            <li v-for="(book, index) in getMyBooks" :key="index">
+                <BookPreview :imgURL="book.imgURL" :title="book.title" :author="book.author" :myBook="book"/>
             </li>
         </ul>
     </div>
@@ -14,7 +14,7 @@
 
 <script>
 import SearchInput from '../utilities/SearchInput.vue'
-import BookPreview from '../search/BookPreview.vue'
+import BookPreview from '../book_list/BookPreview.vue'
 export default {
     data() {
         return {
@@ -26,15 +26,11 @@ export default {
         BookPreview
     }, 
     methods: {
-        searchBooks(value) {
-            this.$store.dispatch('searchBooks', {
-                query: value
-            })
-        }
+
     }, 
     computed: {
-        searchResults() {
-            return this.$store.state.searchResults
+        getMyBooks() {
+            return this.$store.state.myBooks
         }
     }
 }

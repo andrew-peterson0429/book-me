@@ -1,19 +1,18 @@
 <template>
     <NavBar/>
     <div>
-       <h2>My Books</h2>
-       <select id="filterCategory" class="categoryPicker">
-          <option selected>Filter By Category</option>
-        </select>
+       <MyLibrary/>
     </div>
 </template>
 
 <script>
 import NavBar from '../components/utilities/Nav.vue'
+import MyLibrary from '../components/book_list/MyLibrary.vue'
 export default {
     name: 'About', 
     components: {
-        NavBar
+        NavBar, 
+        MyLibrary
     }
 }
 

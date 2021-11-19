@@ -7,7 +7,7 @@
 
 <script>
 import NavBar from '../components/utilities/Nav.vue'
-import BookSearch from '../components/search/BookSearch.vue'
+import BookSearch from '../components/book_list/BookSearch.vue'
 export default {
     name: 'Home', 
     components: {
